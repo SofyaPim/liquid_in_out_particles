@@ -167,10 +167,11 @@ class Effect {
     this.parent = parent;
     this.width = canvas.width;
     this.height = canvas.height;
-    
+       // Определяем количество частиц в зависимости от устройства
+       this.numberOfParticles = this.isMobile() ? 100 : 400;
     this.particles = [];
  
-    this.numberOfParticles = 300;
+    // this.numberOfParticles = 300;
     this.createParticles();
     this.mouse = {
       x: 0,
@@ -198,29 +199,34 @@ class Effect {
       this.mouse.pressed = false;
     });
     window.addEventListener('touchstart', e => {
-  e.preventDefault(); // Предотвращаем стандартное поведение
-  const rect = canvas.getBoundingClientRect();
-  this.mouse.pressed = true;
-  this.mouse.x = e.touches[0].clientX - rect.left;
-  this.mouse.y = e.touches[0].clientY - rect.top;
-  console.log('Touch start:', this.mouse.x, this.mouse.y);
-});
-
-window.addEventListener('touchend', e => {
-  this.mouse.pressed = false;
-});
-
-window.addEventListener('touchmove', e => {
-  e.preventDefault(); // Предотвращаем стандартное поведение
-  const rect = canvas.getBoundingClientRect();
-  if (this.mouse.pressed) {
-    this.mouse.x = e.touches[0].clientX - rect.left;
-    this.mouse.y = e.touches[0].clientY - rect.top;
-    console.log('Touch move:', this.mouse.x, this.mouse.y);
+      e.preventDefault(); // Предотвращаем стандартное поведение
+      const rect = canvas.getBoundingClientRect();
+      this.mouse.pressed = true;
+      this.mouse.x = e.touches[0].clientX - rect.left;
+      this.mouse.y = e.touches[0].clientY - rect.top;
+      console.log('Touch start:', this.mouse.x, this.mouse.y);
+    });
+    
+    window.addEventListener('touchend', e => {
+      this.mouse.pressed = false;
+    });
+    
+    window.addEventListener('touchmove', e => {
+      e.preventDefault(); // Предотвращаем стандартное поведение
+      const rect = canvas.getBoundingClientRect();
+      if (this.mouse.pressed) {
+        this.mouse.x = e.touches[0].clientX - rect.left;
+        this.mouse.y = e.touches[0].clientY - rect.top;
+        console.log('Touch move:', this.mouse.x, this.mouse.y);
+      }
+    });
   }
-});
-  }
+    // Проверка на мобильное устройство
+    isMobile() {
+      return this.parent.clientWidth <= 768; // Ширина экрана меньше или равна 768px
+    }
   createParticles() {
+    this.particles = []; // Очищаем массив частиц
     for (let i = 0; i < this.numberOfParticles; i++) {
       this.particles.push(new Particle(this));
    
@@ -261,6 +267,8 @@ window.addEventListener('touchmove', e => {
     this.width = width;
     this.height = height;
   
+    // Пересоздаем частицы
+    this.createParticles();
     this.particles.forEach((particle) => {
       particle.reset(this.context);
     });
@@ -268,10 +276,9 @@ window.addEventListener('touchmove', e => {
   }
 }
 class LineEffect extends Effect {
-  constructor(canvas,context,parent) {
+  constructor(canvas,context,parent, canvas2) {
      super(canvas, context, parent);
-     
-    this.numberOfParticles = 200;
+    this.canvas2 = canvas2;
   }
   createParticles() {
     for (let i = 0; i < this.numberOfParticles; i++) {
@@ -311,7 +318,9 @@ class LineEffect extends Effect {
     this.canvas.height = height;
     this.width = width;
     this.height = height;
-  
+   // Обновляем размеры второго холста, если это необходимо
+   this.canvas2.width = width;
+   this.canvas2.height = height;
     this.particles.forEach((particle) => {
       particle.reset(this.context);
     });
@@ -319,7 +328,7 @@ class LineEffect extends Effect {
   }
 }
 const effect = new Effect(canvases[0].element, canvases[0].context, canvases[0].parent);
-const effect2 = new LineEffect(canvases[1].element, canvases[1].context, canvases[1].parent);
+const effect2 = new LineEffect(canvases[1].element, canvases[1].context, canvases[1].parent, canvases[2].element,);
 
 function animate() {
   canvases[0].context.clearRect(0, 0, canvases[0].element.width, canvases[0].element.height);
