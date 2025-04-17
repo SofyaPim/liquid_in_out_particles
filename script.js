@@ -198,7 +198,7 @@ class Effect {
     this.parent.addEventListener("mouseup", (e) => {
       this.mouse.pressed = false;
     });
-    window.addEventListener('touchstart', e => {
+    this.parent.addEventListener('touchstart', e => {
       e.preventDefault(); // Предотвращаем стандартное поведение
       const rect = canvas.getBoundingClientRect();
       this.mouse.pressed = true;
@@ -207,11 +207,11 @@ class Effect {
       // console.log('Touch start:', this.mouse.x, this.mouse.y);
     });
     
-    window.addEventListener('touchend', e => {
+    this.parent.addEventListener('touchend', e => {
       this.mouse.pressed = false;
     });
     
-    window.addEventListener('touchmove', e => {
+    this.parent.addEventListener('touchmove', e => {
       e.preventDefault(); // Предотвращаем стандартное поведение
       const rect = canvas.getBoundingClientRect();
       if (this.mouse.pressed) {
