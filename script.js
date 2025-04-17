@@ -197,6 +197,28 @@ class Effect {
     this.parent.addEventListener("mouseup", (e) => {
       this.mouse.pressed = false;
     });
+    window.addEventListener('touchstart', e => {
+  e.preventDefault(); // Предотвращаем стандартное поведение
+  const rect = canvas.getBoundingClientRect();
+  this.mouse.pressed = true;
+  this.mouse.x = e.touches[0].clientX - rect.left;
+  this.mouse.y = e.touches[0].clientY - rect.top;
+  console.log('Touch start:', this.mouse.x, this.mouse.y);
+});
+
+window.addEventListener('touchend', e => {
+  this.mouse.pressed = false;
+});
+
+window.addEventListener('touchmove', e => {
+  e.preventDefault(); // Предотвращаем стандартное поведение
+  const rect = canvas.getBoundingClientRect();
+  if (this.mouse.pressed) {
+    this.mouse.x = e.touches[0].clientX - rect.left;
+    this.mouse.y = e.touches[0].clientY - rect.top;
+    console.log('Touch move:', this.mouse.x, this.mouse.y);
+  }
+});
   }
   createParticles() {
     for (let i = 0; i < this.numberOfParticles; i++) {
