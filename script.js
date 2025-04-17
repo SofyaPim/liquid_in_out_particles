@@ -54,7 +54,7 @@ if (canvases[1].context) {
  
 }
 if (canvases[2].context) { 
-  colorOptions(canvases[2].context, "#FFFFFF", "#FFFFFF");
+  colorOptions(canvases[2].context, "#FFFFFF", "#00000");
 }
 
 
@@ -119,7 +119,7 @@ class Particle {
 class lineParticle extends Particle {
   constructor(effect) {
     super(effect);  
-    this.radius = Math.floor(Math.random() * 5 + 10);
+    this.radius = Math.floor(Math.random() * 25 + 10);
   }
  
   update(){
@@ -204,7 +204,7 @@ class Effect {
       this.mouse.pressed = true;
       this.mouse.x = e.touches[0].clientX - rect.left;
       this.mouse.y = e.touches[0].clientY - rect.top;
-      console.log('Touch start:', this.mouse.x, this.mouse.y);
+      // console.log('Touch start:', this.mouse.x, this.mouse.y);
     });
     
     window.addEventListener('touchend', e => {
@@ -217,7 +217,7 @@ class Effect {
       if (this.mouse.pressed) {
         this.mouse.x = e.touches[0].clientX - rect.left;
         this.mouse.y = e.touches[0].clientY - rect.top;
-        console.log('Touch move:', this.mouse.x, this.mouse.y);
+        // console.log('Touch move:', this.mouse.x, this.mouse.y);
       }
     });
   }
@@ -279,6 +279,8 @@ class LineEffect extends Effect {
   constructor(canvas,context,parent, canvas2) {
      super(canvas, context, parent);
     this.canvas2 = canvas2;
+     // Определяем количество частиц в зависимости от устройства
+     this.numberOfParticles = this.isMobile() ? 100 : 300;
   }
   createParticles() {
     for (let i = 0; i < this.numberOfParticles; i++) {
